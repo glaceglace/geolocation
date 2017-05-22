@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="locations.js"></script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 11,
+          center: new google.maps.LatLng(48.860139, 2.341810),
+          mapTypeId: 'roadmap'
+
+        });
+
+
+
+
+        i = 0;
+        var markers = [];
+        for ( pos in myLocations ) {
+            i = i + 1;
+            var row = myLocations[pos];
+		    window.console && console.log(row);
+            // if ( i < 3 ) { alert(row); }
+            var newLatlng = new google.maps.LatLng(row[0], row[1]);
+            var marker = new google.maps.Marker({
+                position: newLatlng,
+                map: map,
+                title: row[3]
+
+            });
+            var contentString = '<h3>'+row[3]+'</h3>'
+            +'<h4>Loyer:</h4>'+row[4]
+            +'<h4>Zone:</h4>'+row[5]+' '+row[6]
+            +'<h4>Nombre de pièce:</h4>'+row[7]
+            +'<h4>Surface:</h4>'+row[8]
+            +'<h4>Nombre de chambre:</h4>'+row[9]
+            +'<h4>Sations à côté:</h4>'+row[10]+', '+row[11]+', '+row[12]+'.'
+            +'<h4>Tél:</h4>'+row[13]
+            +'<h4>URL:</h4>'+'<a href='+row[2]+'>'+row[2]+'</a>';
+
+            var infowindow = new google.maps.InfoWindow({
+              content:contentString
+            });
+
+
+            google.maps.event.addListener(marker,'click', (function(marker,infowindow){
+                    return function() {
+
+                       infowindow.open(map,marker);
+                    };
+                })(marker,infowindow));
+        }
+      }
+
+      // Loop through the results array and place a marker for each
+      // set of coordinates
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBe9yaqWIJ_kXsPnNj2yAaHiTzfYl3FNm4&callback=initMap">
+    </script>
+  </body>
+</html>
+
+<!--<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBzE9xAESye6Kde-3hT-6B90nfwUkcS8Yw&sensor=false">-->
